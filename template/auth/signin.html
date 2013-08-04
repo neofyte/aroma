@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block container %}
+    {% if form.errors %}
+    <div class="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning!</strong> {{ form.errors }}.
+    </div>
+    {% endif %}
+
+    <form action="/auth/signin/" method="POST" accept-charset="UTF-8">{% csrf_token %}
+      {{ signInForm.username}}
+      {{ signInForm.password}}
+      <button class="btn btn-primary" type="submit">Sign In</button>
+    </form>
+{% endblock %}

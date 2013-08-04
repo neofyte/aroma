@@ -1,0 +1,38 @@
+{% extends "note/note_base.html" %}
+
+{% block javascript %}
+  <script type="text/javascript" src="static/js/showdown.js"></script>
+  <script type="text/javascript" src="static/js/showdown-gui.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [["$","$"],["\\(","\\)"]]
+      }
+    });
+  </script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+  </script>
+{% endblock %}
+
+{% block container %}
+<div class="row">
+  <ul class="breadcrumb">
+    <li><a href="{% url 'note_main' %}">Note</a></li>
+    <li><a href="{% url 'note_repo' request.user.id %}">My Note</a></li>
+    <li class="active">{{note.title}}</li>
+  </ul>
+</div>
+  
+<div class="row">
+  <div class="panel">
+    <h3>{{note.title}}</h3>
+    <p>{{note.author}}</p>
+    <p>{{note.created}}</p>
+    <hr>
+    <div>
+      {{note.content}}
+    </div>
+  </div>
+</div>
+{% endblock %}

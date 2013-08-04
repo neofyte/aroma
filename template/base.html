@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aroma</title>
+    <link media="screen" rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+    <link media="screen" rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-glyphicons.css">
+    {% block css %}
+    {% endblock %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    {% block javascript %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <a class="navbar-brand" href="#">Aroma Logo</a>
+      {% block navbar %}
+      {% endblock %}
+      
+      {% if request.user.is_authenticated %}
+      <ul class="nav navbar-nav pull-right">
+      <li><p class="navbar-text">Welcome {{request.user}}</p></li>
+      <li><a href="auth/signout" class="navbar-link">Sign Out</a></li>
+      </ul>
+      {% else %}
+      <ul class="nav navbar-nav pull-right">
+      <li><a href="auth/signout" class="navbar-link">Sign In</a></li>
+      <li><a href="auth/signout" class="navbar-link">Sign Up</a></li>
+      </ul>
+      {% endif %}
+    </div>
+
+    <div class="container">
+    {% block container %}
+    {% endblock %}
+    </div>
+  </body>
+</html>

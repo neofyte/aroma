@@ -1,0 +1,29 @@
+{% extends "note/note_base.html" %}
+
+{% block container %}
+  <div class="col-lg-12">
+    <div class="list-group" id="note-list">
+      <li class="list-group-item list-group-head">Notes</li>
+      {% if not note %}
+      <h3> no notes yet, <a href="{% url 'AromaNote.views.note_create' %}">post one now</a>.</h3>
+      {% endif %}
+      {% for item in note %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-lg-9">
+            <h4>{{item.title}}</h4>
+            <p>posted on {{item.created}}</p>
+          </div>
+          <div class="col-lg-3">
+            <h2 class="pull-right">
+              <a href="#" class="note-detail">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </h2>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

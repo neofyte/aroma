@@ -1,0 +1,74 @@
+{% extends "note/note_base.html" %}
+
+{% block javascript %}
+  <script type="text/javascript" src="static/js/showdown.js"></script>
+  <script type="text/javascript" src="static/js/showdown-gui.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [["$","$"],["\\(","\\)"]]
+      }
+    });
+  </script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+  </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+
+      function setPanelHeights() {
+          var windowHeight = $(window).height();
+          var navbarHeight = $('.navbar').height();
+          var breadcrumbHeight = $('.row .breadcrumb').height();
+
+          // figure out how much room the panes should fill
+          var roomLeft = windowHeight - navbarHeight - breadcrumbHeight - 130;
+          if (roomLeft < 0) roomLeft = 0;
+
+          $('#inputPanel, #previewPanel').css("height", roomLeft);
+      };
+
+      $(window).load(setPanelHeights);
+      $(window).resize(setPanelHeights);
+
+      $("#inputPanel").scroll(function () { 
+          $("#previewPanel").scrollTop($("#inputPanel").scrollTop());
+      });
+
+  });
+  </script>
+{% endblock %}
+    
+{% block container %}
+      <div class="row">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'note_main' %}">Note</a></li>
+          <li><a href="{% url 'note_repo' request.user.id %}">My Note</a></li>
+          <li class="active">Edit</li>
+        </ul>
+      </div>
+
+      {% if errors %}
+      <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Warning!</strong> Best check yo self, you're not looking too good.
+        {{form.errors}}
+      </div>
+      {% endif %}
+        
+      <div class="row">
+          <div class="col-lg-6">
+            <form action="/" method="POST" accept-charset="UTF-8">{% csrf_token %}
+            {{form.title}}
+            {{form.content}}
+            </form>
+            <br>
+            <button type="button" class="btn btn-primary" data-loading-text="Loading...">Submit</button>
+          </div>
+          <div id="previewPanel" class="col-lg-6"></div>
+      </div>
+      <div id="footer">
+      </div>
+      }
+      }
+{% endblock %}

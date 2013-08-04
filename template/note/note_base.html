@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style type="text/css">
+.container {
+  margin-top: 80px;
+}
+.list-group-head {
+  background-color: #F5F5F5;
+}
+.note-detail:hover {
+  text-decoration: none;
+}
+#note-list li:hover {
+  background-color: #F5F5F5;
+}
+#previewPanel {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  word-wrap: break-word;
+  padding: 3px;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+  <li><a href="#">Timeline</a></li>
+  <li class="active"><a href="#">Note</a></li>
+  <li><a href="#">Marker</a></li>
+</ul>
+{% endblock %}
+
+{% block container %}
+{% endblock %}
