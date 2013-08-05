@@ -1,8 +1,8 @@
 {% extends "note/note_base.html" %}
 
 {% block javascript %}
-  <script type="text/javascript" src="static/js/showdown.js"></script>
-  <script type="text/javascript" src="static/js/showdown-gui.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/showdown.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/showdown-gui.js"></script>
   <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -26,6 +26,7 @@
           if (roomLeft < 0) roomLeft = 0;
 
           $('#inputPanel, #previewPanel').css("height", roomLeft);
+          $('#previewPanel').css("margin-top", 80);
       };
 
       $(window).load(setPanelHeights);
@@ -43,7 +44,7 @@
       <div class="row">
         <ul class="breadcrumb">
           <li><a href="{% url 'note_main' %}">Note</a></li>
-          <li><a href="{% url 'note_repo' request.user.id %}">My Note</a></li>
+          <li><a href="{% url 'note_repo' user.id %}">My Note</a></li>
           <li class="active">Edit</li>
         </ul>
       </div>
@@ -52,23 +53,20 @@
       <div class="alert alert-danger">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <strong>Warning!</strong> Best check yo self, you're not looking too good.
-        {{form.errors}}
+        {{errors}}
       </div>
       {% endif %}
         
       <div class="row">
           <div class="col-lg-6">
-            <form action="/" method="POST" accept-charset="UTF-8">{% csrf_token %}
-            {{form.title}}
-            {{form.content}}
-            </form>
+            <form action="{% url 'note_create' %}" method="POST" accept-charset="UTF-8">{% csrf_token %}
+            {{form.as_table}}
             <br>
-            <button type="button" class="btn btn-primary" data-loading-text="Loading...">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
           </div>
           <div id="previewPanel" class="col-lg-6"></div>
       </div>
       <div id="footer">
       </div>
-      }
-      }
 {% endblock %}

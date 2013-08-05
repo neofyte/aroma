@@ -1,14 +1,19 @@
-from django.forms import ModelForm, Textarea
+from django import forms
 from AromaNote.models import AromaNote
 
-class AromaNoteForm(ModelForm):
+class AromaNoteForm(forms.ModelForm):
     class Meta:
         model = AromaNote
-        fields = ('content', 'title')
+        fields = ('title', 'content')
         widgets = {
-            'content': Textarea(attrs={
+            'title': forms.TextInput(attrs={
+                "class":"form-control", 
+                "id":"title-panel",
+            }),
+            'content': forms.Textarea(attrs={
                 "class":"form-control", 
                 "id":"inputPanel",
+                "resize":"none",
             }),
         }
     

@@ -1,8 +1,7 @@
 {% extends "note/note_base.html" %}
 
 {% block javascript %}
-  <script type="text/javascript" src="static/js/showdown.js"></script>
-  <script type="text/javascript" src="static/js/showdown-gui.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/showdown.js"></script>
   <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       tex2jax: {
@@ -19,7 +18,7 @@
 <div class="row">
   <ul class="breadcrumb">
     <li><a href="{% url 'note_main' %}">Note</a></li>
-    <li><a href="{% url 'note_repo' request.user.id %}">My Note</a></li>
+    <li><a href="{% url 'note_repo' user.id %}">My Note</a></li>
     <li class="active">{{note.title}}</li>
   </ul>
 </div>

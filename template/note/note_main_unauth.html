@@ -5,7 +5,7 @@
     <div class="list-group" id="note-list">
       <li class="list-group-item list-group-head">Notes</li>
       {% if not note %}
-      <h3> no notes yet, <a href="{% url 'AromaNote.views.note_create' %}">post one now</a>.</h3>
+      <h3> no notes yet, <a href="{% url 'note_create' %}">post one now</a>.</h3>
       {% endif %}
       {% for item in note %}
       <li class="list-group-item">

@@ -16,7 +16,7 @@ from django.core.urlresolvers import reverse
 #import mint modules
 #from Announce.views import announce_main
 #from AromaUser.views import signin, signup, signout
-from AromaNote.views import note_main, note_create, note_repo, note_detail
+#from AromaNote.views import note_main, note_create, note_repo, note_detail
 
 #admin
 admin.autodiscover()
@@ -44,15 +44,15 @@ urlpatterns = patterns('',
     
 )
 
-urlpatterns += patterns('',
-    url(r'^note/$', note_main),
-    url(r'^note/create/$', note_create),
-    url(r'^note/(?P<user_id>\d+)/$', note_repo),
-    url(r'^note/(?P<user_id>\d+)/(?P<note_id>\d+)/$', note_detail, name='note_detail'),
+urlpatterns += patterns('AromaNote.views',
+    url(r'^note/$', 'note_main', name='note_main'),
+    url(r'^note/create/$', 'note_create', name='note_create'),
+    url(r'^note/(?P<user_id>\d+)/$', 'note_repo', name='note_repo'),
+    url(r'^note/(?P<user_id>\d+)/(?P<note_id>\d+)/$', 'note_detail', name='note_detail'),
 )
 
 urlpatterns += patterns('AromaUser.views',
-    url(r'^auth/signin/$', 'signin'),
-    url(r'^auth/signup/$', 'signup'),
-    url(r'^auth/signout/$', 'signout'),
+    url(r'^auth/signin/$', 'signin', name='signin'),
+    url(r'^auth/signup/$', 'signup', name='signup'),
+    url(r'^auth/signout/$', 'signout', name='signout'),
 )

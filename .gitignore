@@ -2,3 +2,11 @@
 *.pot
 *.pyc
 local_settings.py
+settings.py
+settings-dep.py
+
+sqlite.db
+
+css/
+js/
+fonts/

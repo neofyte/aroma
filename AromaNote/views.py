@@ -12,7 +12,7 @@ from .models import AromaNote
 from .forms import AromaNoteForm
 from AromaUser.models import AromaUser
 
-#@require_http_methods(["GET"])
+@require_http_methods(["GET"])
 def note_main(request):
     if request.user.is_authenticated():
         # get request.user's note repo
@@ -28,7 +28,7 @@ def note_main(request):
         })
     return render_to_response('note/note_main_unauth.html', variables)
 
-#@require_http_methods(["GET"])
+@require_http_methods(["GET"])
 def note_repo(request, user_id):
     #get user_id's note repo
 
@@ -42,7 +42,8 @@ def note_repo(request, user_id):
     })
     return render_to_response('note/note_repo.html', variables)
 
-#@require_http_methods(["GET", "POST"])
+@login_required(login_url='/auth/signin/')
+@require_http_methods(["GET", "POST"])
 def note_create(request):
     # create a note
     errors=[]
@@ -52,10 +53,10 @@ def note_create(request):
 
     elif request.method == "POST":
         # save the note
-        form = AromaNoteForm(request)
+        form = AromaNoteForm(request.POST)
         if form.is_valid():
             note = _note_save(request, form)
-            return HttpResponseRedirect(reverse('note_detail', args=(request.user.id, note.id)))
+            return HttpResponseRedirect(reverse('note_detail', args=[request.user.id, note.id]))
         else:
             form = AromaNoteForm(request.POST)
             errors = form.errors
@@ -69,14 +70,15 @@ def note_create(request):
 def _note_save(request, form):
     note = AromaNote.objects.create(
         content = form.cleaned_data['content'],
-        title = form.cleaned_date['title'],
+        title = form.cleaned_data['title'],
         author = request.user,
         created = datetime.now(),
+        updated = datetime.now(),
         )
     note.save()
     return note
 
-#@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET", "POST"])
 def note_detail(request, user_id, note_id):
     # display a note and process edit request
 

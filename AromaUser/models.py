@@ -38,37 +38,27 @@ class AromaUser(AbstractBaseUser, PermissionsMixin):
     PermissionMixin.
     """
     email = models.EmailField(
-    verbose_name='email address',
-    max_length=60,
-    unique=True,
-    db_index=True,
+        verbose_name='email',
+        max_length=60,
+        unique=True,
+        db_index=True,
+    )
+    nickname = models.CharField(
+        verbose_name='nickname',
+        max_length=20,
     )
     USERNAME_FIELD = 'email'
-    #REQUIRED_FIELDS = ['favorite_topping', ]
+    
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     objects = AromaUserManager()
     def get_full_name(self):
         # The user is identified by their email
-        return "%s" % (self.email )
-    
-    def get_short_name(self):
-        # The user is identified by their email address
         return self.email
     
-    def __unicode__(self):
+    def get_nick_name(self):
+        return self.nickname
+    
+    def __str__(self):
         return self.email
-
-'''
-from django.conf import settings
-
-from teamApp.models import MintTeam
-
-class MintUserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="MintUser")
-    team = models.ForeignKey(MintTeam, related_name='TeamMember')
-
-    def __unicode__(self):
-        return self.name
-'''

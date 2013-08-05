@@ -4,16 +4,16 @@ from django.contrib.auth import login as auth_login, authenticate as auth_authen
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 
-from AromaUser.forms import AuthForm
+from .forms import SignInForm, SignUpForm
 
 User = get_user_model()
 
 def signin(request):
     errors = []
-    form =AuthForm()
+    form =SignInForm()
     if request.method == 'POST':
-        form = AuthForm(request.POST)
-        username = request.POST['username']
+        form = SignInForm(request.POST)
+        username = request.POST['email']
         password = request.POST['password']
         user = auth_authenticate(username=username, password=password)
         if user is not None:
@@ -23,7 +23,7 @@ def signin(request):
             else:
                 errors.append('disabled account')
         else:
-            errors.append('invalid login')
+            errors.append('username password does not match')
     variables = RequestContext(request, {
             'signInForm' : form,
             'errors' : errors,
@@ -32,9 +32,9 @@ def signin(request):
 
 def signup(request):
     errors=[]
-    form = AuthForm()
+    form = SignUpForm()
     if request.method == 'POST':
-        form = AuthForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(
                 username=form.cleaned_data['username'],
