@@ -4,7 +4,7 @@ from django.contrib.auth.models import (
 )
 
 class AromaUserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password, nickname):
         """
         Creates and saves a User with the given email
         and password.
@@ -14,6 +14,7 @@ class AromaUserManager(BaseUserManager):
             raise ValueError(msg)
         user = self.model(
         email=AromaUserManager.normalize_email(email),
+        nickname=nickname,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -57,7 +58,7 @@ class AromaUser(AbstractBaseUser, PermissionsMixin):
         # The user is identified by their email
         return self.email
     
-    def get_nick_name(self):
+    def get_short_name(self):
         return self.nickname
     
     def __str__(self):

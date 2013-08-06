@@ -19,9 +19,9 @@
       {% block navbar %}
       {% endblock %}
       
-      {% if request.user.is_authenticated %}
+      {% if user.is_authenticated %}
       <ul class="nav navbar-nav pull-right">
-      <li><p class="navbar-text">Welcome {{request.user}}</p></li>
+      <li><p class="navbar-text">Welcome {{user.nickname}}</p></li>
       <li><a href="{% url 'signout' %}" class="navbar-link">Sign Out</a></li>
       </ul>
       {% else %}

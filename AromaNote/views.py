@@ -33,11 +33,11 @@ def note_repo(request, user_id):
     #get user_id's note repo
 
     user = get_object_or_404(AromaUser, pk=user_id)
-    #if request.user == user:
-    #    return HttpResponseRedirect(reverse('note_main'))
+    if request.user == user:
+        return HttpResponseRedirect(reverse('note_main'))
     notes = AromaNote.objects.filter(author=user).order_by('-created')
     variables = RequestContext(request, {
-        'username' : user,
+        'nickname' : user.nickname,
         'note' : notes,
     })
     return render_to_response('note/note_repo.html', variables)
@@ -56,7 +56,9 @@ def note_create(request):
         form = AromaNoteForm(request.POST)
         if form.is_valid():
             note = _note_save(request, form)
-            return HttpResponseRedirect(reverse('note_detail', args=[request.user.id, note.id]))
+            return HttpResponseRedirect(
+                reverse('note_detail', args=[request.user.id, note.id])
+                )
         else:
             form = AromaNoteForm(request.POST)
             errors = form.errors
@@ -65,7 +67,7 @@ def note_create(request):
         'form' : form,
         'errors' : errors,
     })
-    return render_to_response('note/note_edit.html', variables)
+    return render_to_response('note/note_create.html', variables)
 
 def _note_save(request, form):
     note = AromaNote.objects.create(
@@ -83,18 +85,38 @@ def note_detail(request, user_id, note_id):
     # display a note and process edit request
 
     if request.method == "GET":
-        note = get_object_or_404(AromaNote, pk=note_id)
-        variables = RequestContext(request, {
-            'note' : note,
-        })
-        if request.user.id == user_id and request.GET.get("action") == "edit":
+        if request.user.id == int(user_id) and request.GET.get('action','') == 'edit':
             # get edit board with note content
+
+            note = get_object_or_404(AromaNote, pk=note_id)
+            form = AromaNoteForm(instance=note)
+            variables = RequestContext(request, {
+                'form' : form,
+                'user_id' : user_id,
+                'note_id' : note_id,
+            })
             return render_to_response('note/note_edit.html', variables)
         else:
+            user = get_object_or_404(AromaUser, pk=user_id)
+            note = get_object_or_404(AromaNote, pk=note_id)
+            variables = RequestContext(request, {
+                'note' : note,
+                'repo_user' : user,
+
+            })
             # show the note
             return render_to_response('note/note_detail.html', variables)
 
     elif request.method == "POST":
         # save the editted note
+        form = AromaNoteForm(request.POST)
+        if form.is_valid():
+            note = get_object_or_404(AromaNote, pk=note_id)
+            note.title = form.cleaned_data['title']
+            note.content = form.cleaned_data['content']
+            note.save()
+            return HttpResponseRedirect(reverse('note_detail', args=[user_id, note.id]))
+        return HttpResponseRedirect(
+            reverse('note_main')
+            )
 
-        pass

@@ -3,7 +3,7 @@
 {% block container %}
   <div class="col-lg-3" id="note-affix-component">
     <ul class="list-group">
-      <li class="list-group-item list-group-head">{{user}}</li>
+      <li class="list-group-item list-group-head">{{user.nickname}}</li>
       <li class="list-group-item">Signed Up on:</li>
       <li class="list-group-item">Notes published:</li>
       <li class="list-group-item">Papers Marked:</li>
@@ -16,7 +16,7 @@
 
   <div class="col-lg-9">
     <div class="list-group" id="note-list">
-      <li class="list-group-item list-group-head">{{user}}'s Notes</li>
+      <li class="list-group-item list-group-head">{{user.nickname}}'s Notes</li>
       {% if not note %}
       <h3> no notes yet, <a href="{% url 'note_create' %}">post one now</a>.</h3>
       {% endif %}

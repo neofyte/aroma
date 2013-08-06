@@ -5,85 +5,81 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .models import AromaUser
 
-class SignInForm(forms.ModelForm):
-    class Meta:
-        model = AromaUser
-        fields = ('email', 'password')
-        label = {
-            'email' : 'E-mail',
-            'password' : 'Mima',
-        }
-        widgets = {
-            'email': forms.TextInput(attrs={
+email_errors = {
+    'invalid': '这不可能是邮箱。',
+    'required':'一定要填邮箱哦。',
+}
+nickname_errors = {
+    'invalid': 'username length',
+    'required':'一定要填username哦。',
+}
+password_errors = {
+    'required':'一定要填密码哦。',
+}
+
+
+class SignInForm(forms.Form):
+
+    email = forms.EmailField(
+        label='E-mail',
+        max_length=60,
+        widget=forms.TextInput(attrs={
                 "class":"form-control", 
                 "id":"sign-in-email",
             }),
-            'password': forms.PasswordInput(attrs={
+        error_messages=email_errors,
+    )
+    password = forms.CharField(
+        label='Mima',
+        widget=forms.PasswordInput(attrs={
                 "class":"form-control", 
                 "id":"sign-in-password",
             }),
-        }
-        error_messages = {
-            'username' : {
-                'invalid': '这不可能是邮箱。',
-                'required':'一定要填邮箱哦。',
-            },
-            'password' : {
-                'required':'一定要填密码哦。',
-            }
-        }
-
-    '''
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if not re.search(r'^[A-Za-z0-9]+$', username):
-            raise forms.ValidationError('用户名只能用字母或数字。')
-        return username
-    '''
+        error_messages=password_errors,
+    )
 
 
-class SignUpForm(forms.ModelForm):
-    class Meta:
-        model = AromaUser
-        fields = ('email', 'nickname', 'password')
-        label = {
-            'email' : 'E-mail',
-            'nickname' : 'Username',
-            'password' : 'Mima',
-        }
-        widgets = {
-            'email': forms.TextInput(attrs={
+class SignUpForm(forms.Form):
+
+    email = forms.EmailField(
+        label='E-mail',
+        max_length=60,
+        widget=forms.TextInput(attrs={
                 "class":"form-control", 
                 "id":"sign-in-email",
             }),
-            'nickname': forms.TextInput(attrs={
+        error_messages=email_errors,
+    )
+    nickname = forms.CharField(
+        label='username',
+        max_length=20,
+        widget=forms.TextInput(attrs={
                 "class":"form-control", 
                 "id":"sign-in-nickname",
             }),
-            'password': forms.PasswordInput(attrs={
+        error_messages=nickname_errors,
+    )
+    password = forms.CharField(
+        label='Mima',
+        widget=forms.PasswordInput(attrs={
                 "class":"form-control", 
                 "id":"sign-in-password",
             }),
-        }
-        error_messages = {
-            'username' : {
-                'invalid': '这不可能是邮箱。',
-                'required': '一定要填邮箱哦。',
-                'unique' : '邮箱已存在。',
-            },
-            'nickname' : {
-                'invalid': '用户名。',
-                'required':'一定要填。',
-            },
-            'password' : {
-                'required':'一定要填密码哦。',
-            }
-        }
+        error_messages=password_errors,
+    )
 
     def clean_nickname(self):
         nickname = self.cleaned_data['nickname']
         if nickname != re.match('[\w\u2E80-\u9FFF]+', nickname).group(0):
             raise forms.ValidationError("Invalid nickname.")
         return nickname
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        try:
+            AromaUser.objects.get(email=email)
+        except ObjectDoesNotExist:
+            return email
+        raise forms.ValidationError('邮箱已存在。')
 
 

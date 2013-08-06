@@ -18,7 +18,7 @@
 <div class="row">
   <ul class="breadcrumb">
     <li><a href="{% url 'note_main' %}">Note</a></li>
-    <li><a href="{% url 'note_repo' user.id %}">My Note</a></li>
+    <li><a href="{% url 'note_repo' repo_user.id %}">{{repo_user.nickname}}'s Note</a></li>
     <li class="active">{{note.title}}</li>
   </ul>
 </div>
@@ -26,7 +26,7 @@
 <div class="row">
   <div class="panel">
     <h3>{{note.title}}</h3>
-    <p>{{note.author}}</p>
+    <p>{{note.author.nickname}}</p>
     <p>{{note.created}}</p>
     <hr>
     <div>

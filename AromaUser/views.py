@@ -8,6 +8,9 @@ from .forms import SignInForm, SignUpForm
 
 User = get_user_model()
 
+from django.utils.translation import activate
+activate('ch')
+
 def signin(request):
     errors = []
     form =SignInForm()
@@ -37,12 +40,11 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(
-                username=form.cleaned_data['username'],
+                nickname=form.cleaned_data['nickname'],
                 password=form.cleaned_data['password'],
                 email=form.cleaned_data['email']
             )
-            auth_login(request, user)
-            return  HttpResponseRedirect('/')
+            return  signin(request)
         else:
             errors = form.errors
     variables = RequestContext(request, {
@@ -53,4 +55,4 @@ def signup(request):
 
 def signout(request):
     logout(request)
-    return HttpResponseRedirect('note/')
+    return HttpResponseRedirect('/note/')
