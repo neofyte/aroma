@@ -8,6 +8,8 @@ from django.template import RequestContext
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.db.models.signals import post_save
+
 from .models import AromaNote
 from .forms import AromaNoteForm
 from AromaUser.models import AromaUser
@@ -18,7 +20,6 @@ def note_main(request):
         # get request.user's note repo
         notes = AromaNote.objects.filter(author=request.user).order_by('-created')
         variables = RequestContext(request, {
-            'user' : request.user,
             'note' : notes,
             })
         return render_to_response('note/note_main.html', variables)
@@ -56,6 +57,7 @@ def note_create(request):
         form = AromaNoteForm(request.POST)
         if form.is_valid():
             note = _note_save(request, form)
+            post_save.send(sender=AromaNote, instance=note)
             return HttpResponseRedirect(
                 reverse('note_detail', args=[request.user.id, note.id])
                 )

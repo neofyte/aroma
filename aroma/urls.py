@@ -44,6 +44,10 @@ urlpatterns = patterns('',
     
 )
 
+urlpatterns += patterns('AromaAnnounce.views',
+    url(r'^$', 'announce', name='announce'),
+)
+
 urlpatterns += patterns('AromaNote.views',
     url(r'^note/$', 'note_main', name='note_main'),
     url(r'^note/create/$', 'note_create', name='note_create'),
@@ -56,3 +60,5 @@ urlpatterns += patterns('AromaUser.views',
     url(r'^auth/signup/$', 'signup', name='signup'),
     url(r'^auth/signout/$', 'signout', name='signout'),
 )
+
+

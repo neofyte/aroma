@@ -29,12 +29,12 @@ class AromaEvent(models.Model):
 
 def AromaEvent_post_save(sender, instance, signal, *args, **kwargs):  
     post = instance  
-    if post.created == post.updated:  
-        event = Event(
-        	content = post,
-        	announcer = post.author,
-        )  
-        event.save()  
+    event = AromaEvent(
+    	content = post,
+    	announcer = post.author,
+        event = post,
+    )  
+    event.save()  
   
 post_save.connect(AromaEvent_post_save, sender=AromaNote)
 relationship_created.connect(AromaEvent_post_save, sender=Relationship)

@@ -1,0 +1,45 @@
+{% extends "note/note_base.html" %}
+
+{% block container %}
+  <div class="col-lg-3" id="note-affix-component">
+    <ul class="list-group">
+      <li class="list-group-item list-group-head">{{user.nickname}}</li>
+      <li class="list-group-item">Signed Up on:</li>
+      <li class="list-group-item">Notes published:</li>
+      <li class="list-group-item">Papers Marked:</li>
+    </ul>
+    <div class="list-group">
+      <a href="{% url 'note_create' %}" class="list-group-item">Write a note</a>
+      <a href="#" class="list-group-item">Add a paper</a>
+    </div>
+    <div class="list-group">
+      <a href="#" class="list-group-item">My Message</a>
+    </div>
+  </div>
+
+  <div class="col-lg-9">
+    <div class="list-group" id="note-list">
+      <li class="list-group-item list-group-head">Announcements</li>
+      {% if not event %}
+      <h3> no Announcements yet, <a href="{% url 'note_create' %}">post a note now</a>.</h3>
+      {% endif %}
+      {% for item in event %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-lg-9">
+            <h4>{{item.announcer.nickname}} posted {{item.content}}on {{item.created_date}}</h4>
+            <div>related to: paper link</div>
+          </div>
+          <div class="col-lg-3">
+            <h2 class="pull-right">
+              <a href="#" class="note-detail">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </h2>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
