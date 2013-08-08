@@ -2,10 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.db.models.signals import post_save
 from django.dispatch import Signal, receiver
 
-from AromaNote.models import AromaNote
 from AromaFriend.models import Relationship
 from AromaFriend.signals import relationship_created
 
@@ -36,5 +34,5 @@ def AromaEvent_post_save(sender, instance, signal, *args, **kwargs):
     )  
     event.save()  
   
-post_save.connect(AromaEvent_post_save, sender=AromaNote)
+
 relationship_created.connect(AromaEvent_post_save, sender=Relationship)

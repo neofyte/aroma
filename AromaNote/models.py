@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from django.db.models.signals import post_save
+from AromaAnnounce.models import AromaEvent_post_save
 #from AromaAnnounce.models import AromaEvent
 
 class AromaNote(models.Model):
@@ -18,4 +20,6 @@ class AromaNote(models.Model):
         return self.title
       
     def description(self):  
-        return u'{0} 发表《{1}》'.format(self.author, self.title)  
+        return u'{0} 发表《{1}》'.format(self.author, self.title)
+
+post_save.connect(AromaEvent_post_save, sender=AromaNote, dispatch_uid='AromaNote')

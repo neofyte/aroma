@@ -9,6 +9,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import AromaEvent
+from AromaNote.models import AromaNote
 from AromaUser.models import AromaUser
 
 @require_http_methods(["GET"])
