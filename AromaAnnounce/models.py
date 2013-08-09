@@ -16,23 +16,23 @@ class AromaEvent(models.Model):
     content_type = models.ForeignKey(ContentType)  
     object_id = models.PositiveIntegerField()  
       
-    event = generic.GenericForeignKey('content_type', 'object_id')  
+    event = generic.GenericForeignKey()  
       
     def __str__(self):
         return '{0} @ {1}'.format(self.owner, self.created_date)
 
+    @property
     def description(self):  
-        return self.event.description()
+        return self.event.description
 
-
-def AromaEvent_post_save(sender, instance, signal, *args, **kwargs):  
-    post = instance  
-    event = AromaEvent(
-    	content = post,
-    	announcer = post.author,
-        event = post,
-    )  
-    event.save()  
+    @classmethod
+    def AromaEvent_post_save(self, sender, instance, *args, **kwargs):  
+        event = AromaEvent(
+            content = instance.description,
+            announcer = instance.announcer,
+            event = instance,
+        )  
+        event.save()  
   
 
-relationship_created.connect(AromaEvent_post_save, sender=Relationship)
+#relationship_created.connect(AromaEvent_post_save, sender=Relationship)

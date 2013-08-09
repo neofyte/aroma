@@ -1,32 +1,39 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
 
 class AromaUserManager(BaseUserManager):
-    def create_user(self, email, password, nickname):
+
+    def create_user(self, email, password, nickname, **extra_fields):
         """
         Creates and saves a User with the given email
         and password.
         """
+        now=timezone.now()
         if not email:
             msg = 'Users must have an email address'
             raise ValueError(msg)
         user = self.model(
         email=AromaUserManager.normalize_email(email),
         nickname=nickname,
+        is_staff=False, is_active=True, is_superuser=False,
+        **extra_fields
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
           
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, password, nickname):
         """
         Creates and saves a superuser with the given email,
         favorite topping and password.
         """
-        user = self.create_user(email,
+        user = self.create_user(
+            email=email,
             password=password,
+            nickname=nickname,
             )
         user.is_admin = True
         user.is_staff = True
@@ -49,6 +56,9 @@ class AromaUser(AbstractBaseUser, PermissionsMixin):
         max_length=20,
     )
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nickname', ]
+
+    objects = AromaUserManager()
     
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
