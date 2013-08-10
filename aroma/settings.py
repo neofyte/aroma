@@ -138,6 +138,7 @@ INSTALLED_APPS = (
      'AromaFriend',
      'AromaNote',
      'AromaAnnounce',
+     'AromaPaper',
 
 )
 

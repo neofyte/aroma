@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-from django.db.models.signals import post_save
 from utils.signals import note_created
 
 from AromaAnnounce.models import AromaEvent

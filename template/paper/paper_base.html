@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style type="text/css">
+.container {
+  margin-top: 80px;
+}
+.list-group-head {
+  background-color: #F5F5F5;
+}
+.note-detail:hover {
+  text-decoration: none;
+}
+#note-list li:hover {
+  background-color: #F5F5F5;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+  <li><a href="#">Timeline</a></li>
+  <li><a href="{% url 'note_main' %}">Note</a></li>
+  <li class="active"><a href="{% url 'paper_main' %}">Marker</a></li>
+</ul>
+{% endblock %}
+
+{% block container %}
+{% endblock %}
