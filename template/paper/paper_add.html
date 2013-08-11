@@ -1,0 +1,18 @@
+{% extends "paper/paper_base.html" %}
+
+{% block css %}
+<style type="text/css">
+.container {
+  margin-top: 80px;
+}
+</style>
+{% endblock %}
+
+{% block container %}
+
+    <div class="well col-lg-6">
+    <legend>Add a Paper</legend>
+    {% include "paper/paper_add_form.html" %}
+
+    </div>
+{% endblock %}

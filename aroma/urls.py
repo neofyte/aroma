@@ -61,4 +61,9 @@ urlpatterns += patterns('AromaUser.views',
     url(r'^auth/signout/$', 'signout', name='signout'),
 )
 
+urlpatterns += patterns('AromaPaper.views',
+    url(r'^paper/$', 'paper_main', name='paper_main'),
+    url(r'^paper/add/$', 'paper_add', name='paper_add'),
+    url(r'^paper/(?P<paper_id>\d+)/$', 'paper_detail', name='paper_detail'),
+)
 
