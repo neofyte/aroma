@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -11,6 +12,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from AromaUser.models import AromaUser
 from AromaPaper.models import AromaPaperEntry
 from .forms import ArXivLinkForm
+
+from lib.arxiv_retriever.arxiv_id_parser import arxiv_id_parser
+from lib.arxiv_retriever.arxiv_query import arxiv_query
+from lib.arxiv_retriever.arxiv_response_parser import xml_parser
 
 @require_http_methods(["GET"])
 def paper_main(request):
@@ -42,4 +47,13 @@ def paper_add(request):
             })
         return render_to_response('paper/paper_add.html', variables)
     else:
-        pass
+        if request.is_ajax():
+            arxiv_id = request.POST['arxiv_id']
+            id_cleaned = arxiv_id_parser(arxiv_id)
+            xml = arxiv_query(id_cleaned)
+            arxiv_dict = xml_parser(xml, arxiv_id)
+            return HttpResponse(json.dumps(arxiv_dict), mimetype='application/javascript')
+        else:
+            # TODO: deal with the form
+            pass
+

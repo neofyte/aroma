@@ -1,5 +1,28 @@
 {% extends "note/note_base.html" %}
 
+{% block javascript %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#inputLink input').blur(function(){
+    $("#arxivLoading").show();
+    var arxiv_id = $('#inputLink input').val();
+    data = { arxiv_id : arxiv_id,}
+    console.log(data); // to delete
+    $.post(
+      '{% url "paper_add" %}',
+      data,
+      function(res){
+        $("#arxivLoading").hide();
+        $('#arxivResult').html(res);
+      }
+      );
+  });
+
+});
+</script>
+{% endblock %}
+
 {% block container %}
   <div class="col-lg-3" id="note-affix-component">
     <ul class="list-group">
@@ -18,19 +41,34 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
+              <form class="form-horizontal" action="{% url 'paper_add' %}" method="POST" accept-charset="UTF-8">{% csrf_token %}
+
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Modal title</h4>
+              <h4 class="modal-title">Add a paper</h4>
             </div>
             <div class="modal-body">
-              <div id="ajaxLoading" style="display: none">
+              <div id="arxivLoading" style="display: none">
+              <!--font awesome thing-->
                 <i class="icon-spinner icon-spin icon-large"></i>loading content...
               </div>
-                {% include "paper/paper_add_form.html" %}
+                <div class="form-group">
+                  {{ arXivLinkForm.email.errors }}
+                  <div class="row">
+                  <div class="col-lg-3">
+                    <label for="inputLink" class="control-label"><h4>arXiv Link</h4></label>
+                  </div>
+                    <div class="col-lg-8" id="inputLink" >
+                    {{ arXivLinkForm.arxiv_link }}
+                    </div>
+                  <div id="arxivResult"></div>
+                  </div>
+                </div>
             </div>
             <div class="modal-footer">
+              <button class="btn btn-primary pull-right" type="submit">Submit</button>
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
             </div>
+            </form>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
