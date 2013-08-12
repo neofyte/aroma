@@ -8,17 +8,21 @@ $(document).ready(function() {
     $("#arxivLoading").show();
     var arxiv_id = $('#inputLink input').val();
     data = { arxiv_id : arxiv_id,}
-    console.log(data); // to delete
     $.post(
       '{% url "paper_add" %}',
       data,
       function(res){
+        console.log(res.author); // to delete
         $("#arxivLoading").hide();
-        $('#arxivResult').html(res);
-      }
-      );
+        $('#arxivTitle').text('Title:' + res.title);
+        $('#arxivId').text('id:' + res.identifier);
+        $('#arxivAuthor').text('author:' + res.author);
+        $('#arxivCat').text('category:' + res.category);
+        $('#arxivSummary').text('abstract:' + res.summary);
+        $("#arxivResult").show();
+      }, 
+      "json");
   });
-
 });
 </script>
 {% endblock %}
@@ -40,28 +44,30 @@ $(document).ready(function() {
       <div class="modal fade" id="addPaperModal">
         <div class="modal-dialog">
           <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'paper_add' %}" method="POST" accept-charset="UTF-8">{% csrf_token %}
             <div class="modal-header">
-              <form class="form-horizontal" action="{% url 'paper_add' %}" method="POST" accept-charset="UTF-8">{% csrf_token %}
-
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
               <h4 class="modal-title">Add a paper</h4>
             </div>
             <div class="modal-body">
-              <div id="arxivLoading" style="display: none">
-              <!--font awesome thing-->
-                <i class="icon-spinner icon-spin icon-large"></i>loading content...
-              </div>
                 <div class="form-group">
                   {{ arXivLinkForm.email.errors }}
                   <div class="row">
-                  <div class="col-lg-3">
-                    <label for="inputLink" class="control-label"><h4>arXiv Link</h4></label>
-                  </div>
+                    <label for="inputLink" class="control-label col-lg-3"><h4>arXiv Link</h4></label>
                     <div class="col-lg-8" id="inputLink" >
                     {{ arXivLinkForm.arxiv_link }}
                     </div>
-                  <div id="arxivResult"></div>
                   </div>
+                </div><!--form-group-->
+                <div id="arxivLoading" style="display: none; text-align:center">
+                  <img src="{{ STATIC_URL }}img/ajax-loading.gif">
+                </div>
+                <div id="arxivResult" style="display:none">
+                  <p id="arxivTitle"></p>
+                  <p id="arxivId"></p>
+                  <p id="arxivAuthor"></p>
+                  <p id="arxivCat"></p>
+                  <p id="arxivSummary"></p>
                 </div>
             </div>
             <div class="modal-footer">
