@@ -3,20 +3,24 @@ from django.conf import settings
 
 from utils.signals import paper_entry_created
 
+from .validator import validate_identifier
 from AromaAnnounce.models import AromaEvent
 
 class AromaPaperEntry(models.Model):
 
     title = models.CharField(max_length=100)
+    identifier = models.CharField(max_length=20, validator=[validate_identifier])
     abstract = models.CharField(max_length=1000, blank=True)
-    author = models.CharField(max_length=100)
-    comment = models.CharField(max_length=200, blank=True)
+    author = models.CharField(max_length=100, index=True)
     # will establish a separate model for paper subjects
-    subjects = models.CharField(max_length=100, blank=True)
+    category = models.CharField(max_length=15, blank=True)
     submitted = models.DateTimeField(blank=True)
 
+    # add by clean method in AromaPaperForm
+    abs_url = models.URLField()
+
     # aroma data
-    created = models.DateTimeField(auto_now_add=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='UserToPaper')
 
     #trace aromanote back to the event, maybe useless
@@ -34,13 +38,10 @@ class AromaPaperEntry(models.Model):
         return self.creator
 
     def save(self, *args, **kwargs):
+        self.abs_url=''.join(['arxiv.org/abs',identifier.split(':')[1]])
         super(AromaPaperEntry,self).save(*args,**kwargs)
         AromaPaperEntry.send(sender=AromaPaperEntry, instance=self)
 
 paper_entry_created.connect(
-	AromaEvent.AromaEvent_post_save, sender=AromaPaperEntry, dispatch_uid="AromaPaperEntry"
+    AromaEvent.AromaEvent_post_save, sender=AromaPaperEntry, dispatch_uid="AromaPaperEntry"
 )
-
-class PaperRefLink(models.Model):
-	url = models.URLField()
-	paper = models.ForeignKey(AromaPaperEntry, related_name='PaperToRef')
