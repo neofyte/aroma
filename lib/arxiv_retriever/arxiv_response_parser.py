@@ -21,12 +21,13 @@ def xml_parser(xml_content, arxiv_identifier):
     xml_dom = parseString(xml_content)
     #unicode
     #parse the xml by tags for meta-info
+    identifier = arxiv_identifier
     title = getText(xml_dom.getElementsByTagName('title')[1].childNodes)
-    summary = getText(xml_dom.getElementsByTagName('summary')[0].childNodes)
+    abstract = getText(xml_dom.getElementsByTagName('summary')[0].childNodes)
     author_nodes = xml_dom.getElementsByTagName('name')
-    author_list = [getText(author.childNodes) for author in author_nodes]
+    author = [getText(author.childNodes) for author in author_nodes]
     category = xml_dom.getElementsByTagName('arxiv:primary_category')[0].attributes['term'].value
     #return the dict containing meta-info in unicode
-    entry_content = dict(title=title, summary=summary, author=author_list, category=category, identifier=arxiv_identifier)
+    entry_content = dict(title=title, abstract=abstract, author=author, category=category, identifier=identifier)
     #TODO:link-href pdf-link-href
     return entry_content

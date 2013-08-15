@@ -34,7 +34,7 @@ class ArXivPaperForm(forms.Form):
     )
     title = models.CharField(max_length=100)
     identifier = models.CharField(max_length=20, validator=[validate_identifier])
-    abstract = models.CharField(max_length=1000)
+    abstract = models.TextField(max_length=1000)
     author = models.CharField(max_length=100)
     # will establish a separate model for paper subjects
     category = models.CharField(max_length=15)

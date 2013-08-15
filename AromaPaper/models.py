@@ -9,7 +9,7 @@ from AromaAnnounce.models import AromaEvent
 class AromaPaperEntry(models.Model):
 
     title = models.CharField(max_length=100)
-    identifier = models.CharField(max_length=20, validator=[validate_identifier])
+    identifier = models.CharField(max_length=20, validator=[validate_identifier], blank=True)
     abstract = models.CharField(max_length=1000, blank=True)
     author = models.CharField(max_length=100, index=True)
     # will establish a separate model for paper subjects

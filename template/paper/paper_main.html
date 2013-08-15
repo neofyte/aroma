@@ -7,18 +7,18 @@ $(document).ready(function() {
   $('#inputLink input').blur(function(){
     $("#arxivLoading").show();
     var arxiv_id = $('#inputLink input').val();
-    data = { arxiv_id : arxiv_id,}
+    data = { arxiv_id : arxiv_id,};
     $.post(
       '{% url "paper_add" %}',
       data,
       function(res){
         console.log(res.author); // to delete
         $("#arxivLoading").hide();
-        $('#arxivTitle').text('Title:' + res.title);
-        $('#arxivId').text('id:' + res.identifier);
-        $('#arxivAuthor').text('author:' + res.author);
-        $('#arxivCat').text('category:' + res.category);
-        $('#arxivSummary').text('abstract:' + res.summary);
+        $('#arxivTitle').text(res.title);
+        $('#arxivId').text(res.identifier);
+        $('#arxivAuthor').text(res.author);
+        $('#arxivCat').text(res.category);
+        $('#arxivSummary').text(res.summary);
         $("#arxivResult").show();
       }, 
       "json");
@@ -63,11 +63,38 @@ $(document).ready(function() {
                   <img src="{{ STATIC_URL }}img/ajax-loading.gif">
                 </div>
                 <div id="arxivResult" style="display:none">
-                  <p id="arxivTitle"></p>
-                  <p id="arxivId"></p>
-                  <p id="arxivAuthor"></p>
-                  <p id="arxivCat"></p>
-                  <p id="arxivSummary"></p>
+
+                <div class="form-group">
+                  <div class="row">
+                    <label for="arxivTitle" class="control-label col-lg-3"><h4>Title</h4></label>
+                    <input class="col-lg-8" id="arxivTitle" disabled></input>
+                  </div>
+                </div><!--form-group-->
+                <div class="form-group">
+                  <div class="row">
+                    <label for="arxivId" class="control-label col-lg-3"><h4>Id</h4></label>
+                    <input class="col-lg-8" id="arxivId" disabled></input>
+                  </div>
+                </div><!--form-group-->
+                <div class="form-group">
+                  <div class="row">
+                    <label for="arxivAuthor" class="control-label col-lg-3"><h4>Authors</h4></label>
+                    <input class="col-lg-8" id="arxivAuthor" disabled></input>
+                  </div>
+                </div><!--form-group-->
+                <div class="form-group">
+                  <div class="row">
+                    <label for="arxivCat" class="control-label col-lg-3"><h4>Category</h4></label>
+                    <input class="col-lg-8" id="arxivCat" disabled></input>
+                  </div>
+                </div><!--form-group-->
+                <div class="form-group">
+                  <div class="row">
+                    <label for="arxivSummary" class="control-label col-lg-3"><h4>Abstract</h4></label>
+                    <textarea class="col-lg-8" id="arxivSummary" disabled></textarea>
+                  </div>
+                </div><!--form-group-->
+
                 </div>
             </div>
             <div class="modal-footer">

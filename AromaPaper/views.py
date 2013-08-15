@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core import serializers
 
 from AromaUser.models import AromaUser
 from AromaPaper.models import AromaPaperEntry
@@ -16,6 +17,7 @@ from .forms import ArXivLinkForm
 from lib.arxiv_retriever.arxiv_id_parser import arxiv_id_parser
 from lib.arxiv_retriever.arxiv_query import arxiv_query
 from lib.arxiv_retriever.arxiv_response_parser import xml_parser
+from .validator import validate_identifier
 
 @require_http_methods(["GET"])
 def paper_main(request):
@@ -46,14 +48,30 @@ def paper_add(request):
             'arXivLinkForm' : arxiv_link_form,
             })
         return render_to_response('paper/paper_add.html', variables)
-    else:
+    elif request.method == "POST":
+        paper, paper.id = paper_search(request)
         if request.is_ajax():
-            arxiv_id = request.POST['arxiv_id']
+            arxiv_dict = serializers.serialize("json", paper)
+            return HttpResponse(json.dumps(arxiv_dict), mimetype='application/javascript')
+        return HttpResponseRedirect('/paper/{0}/'.format(paper.id))
+
+def _paper_save(arxiv_dict):
+    paper = AromaPaperEntry(k=v for k,v in arxiv_dict)
+    paper.save()
+    return paper
+
+@require_http_methods(["POST"])
+def paper_search(request):
+    arxiv_id = validate_identifier(request.POST['arxiv_id'])
+    if arxiv_id:
+        try:
+            paper = AromaPaperEntry.objects.get(identifier=arxiv_id)
+        except:
             id_cleaned = arxiv_id_parser(arxiv_id)
             xml = arxiv_query(id_cleaned)
             arxiv_dict = xml_parser(xml, arxiv_id)
-            return HttpResponse(json.dumps(arxiv_dict), mimetype='application/javascript')
-        else:
-            # TODO: deal with the form
-            pass
+            paper = _paper_save(arxiv_dict)
+        return paper, paper.id
+    else:
+        raise Http404
 
