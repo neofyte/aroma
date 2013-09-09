@@ -21,7 +21,7 @@ class AromaNote(models.Model):
     
     @property
     def description(self):  
-        return u'{0} 发表《{1}》'.format(self.author, self.title)
+        return u'{0} 发表《{1}》'.format(self.author.nickname, self.title)
 
     @property
     def announcer(self):

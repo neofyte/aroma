@@ -11,17 +11,17 @@ $(document).ready(function() {
     $.post(
       '{% url "paper_add" %}',
       data,
-      function(res){
-        console.log(res.author); // to delete
+      "json").done(
+      function(resp){
+        console.log(resp.pk); // to delete
         $("#arxivLoading").hide();
-        $('#arxivTitle').text(res.title);
-        $('#arxivId').text(res.identifier);
+        $('#arxivTitle').text(resp.fields.title);
+        $('#arxivId').text(resp.fields.identifier);
         $('#arxivAuthor').text(res.author);
         $('#arxivCat').text(res.category);
         $('#arxivSummary').text(res.summary);
         $("#arxivResult").show();
-      }, 
-      "json");
+      });
   });
 });
 </script>
@@ -51,7 +51,7 @@ $(document).ready(function() {
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                  {{ arXivLinkForm.email.errors }}
+                  {{ arXivLinkForm.errors }}
                   <div class="row">
                     <label for="inputLink" class="control-label col-lg-3"><h4>arXiv Link</h4></label>
                     <div class="col-lg-8" id="inputLink" >
@@ -67,7 +67,7 @@ $(document).ready(function() {
                 <div class="form-group">
                   <div class="row">
                     <label for="arxivTitle" class="control-label col-lg-3"><h4>Title</h4></label>
-                    <input class="col-lg-8" id="arxivTitle" disabled></input>
+                    <input class="col-lg-8 form-control" id="arxivTitle" disabled></input>
                   </div>
                 </div><!--form-group-->
                 <div class="form-group">

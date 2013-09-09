@@ -51,12 +51,14 @@ def paper_add(request):
     elif request.method == "POST":
         paper, paper.id = paper_search(request)
         if request.is_ajax():
-            arxiv_dict = serializers.serialize("json", paper)
-            return HttpResponse(json.dumps(arxiv_dict), mimetype='application/javascript')
+            arxiv_dict = serializers.serialize("json", [paper])[1:-1]
+            return HttpResponse(json.dumps(arxiv_dict), mimetype='application/json')
         return HttpResponseRedirect('/paper/{0}/'.format(paper.id))
 
-def _paper_save(arxiv_dict):
-    paper = AromaPaperEntry(k=v for k,v in arxiv_dict)
+def _paper_save(user, **kwarg):
+    paper = AromaPaperEntry(**kwarg)
+    paper.submitted = datetime.now()
+    paper.creator_id = user.id
     paper.save()
     return paper
 
@@ -70,7 +72,7 @@ def paper_search(request):
             id_cleaned = arxiv_id_parser(arxiv_id)
             xml = arxiv_query(id_cleaned)
             arxiv_dict = xml_parser(xml, arxiv_id)
-            paper = _paper_save(arxiv_dict)
+            paper = _paper_save(request.user, **arxiv_dict)
         return paper, paper.id
     else:
         raise Http404

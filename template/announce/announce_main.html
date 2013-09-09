@@ -27,12 +27,12 @@
       <li class="list-group-item">
         <div class="row">
           <div class="col-lg-9">
-            <h4>{{item.announcer.nickname}} posted {{item.content}}on {{item.created_date}}</h4>
+            <h4>{{item.announcer.nickname}} posted {{item.title}}on {{item.created_date}}</h4>
             <div>related to: paper link</div>
           </div>
           <div class="col-lg-3">
             <h2 class="pull-right">
-              <a href="{% url 'note_detail' item.announcer.id item.event.id %}" class="note-detail">
+              <a href="{% url 'note_detail' item.announcer.id item.id %}" class="note-detail">
                 <span class="glyphicon glyphicon-chevron-right"></span>
               </a>
             </h2>

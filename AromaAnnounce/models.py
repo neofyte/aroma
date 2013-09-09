@@ -19,7 +19,7 @@ class AromaEvent(models.Model):
     event = generic.GenericForeignKey()  
       
     def __str__(self):
-        return '{0} @ {1}'.format(self.owner, self.created_date)
+        return '{0} @ {1}'.format(self.announcer, self.created_date)
 
     @property
     def description(self):  
