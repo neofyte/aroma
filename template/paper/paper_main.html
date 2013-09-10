@@ -13,13 +13,15 @@ $(document).ready(function() {
       data,
       "json").done(
       function(resp){
-        console.log(resp.pk); // to delete
+        var res = JSON.parse(resp);
+        console.log(res.fields); // to delete
+        console.log(res.fields.title); 
         $("#arxivLoading").hide();
-        $('#arxivTitle').text(resp.fields.title);
-        $('#arxivId').text(resp.fields.identifier);
-        $('#arxivAuthor').text(res.author);
-        $('#arxivCat').text(res.category);
-        $('#arxivSummary').text(res.summary);
+        $('#arxivTitle').text(res.fields.title);
+        $('#arxivId').text(res.fields.identifier);
+        $('#arxivAuthor').text(res.fields.author);
+        $('#arxivCat').text(res.fields.category);
+        $('#arxivAbstract').text(res.fields.abstract);
         $("#arxivResult").show();
       });
   });
@@ -64,36 +66,38 @@ $(document).ready(function() {
                 </div>
                 <div id="arxivResult" style="display:none">
 
-                <div class="form-group">
-                  <div class="row">
-                    <label for="arxivTitle" class="control-label col-lg-3"><h4>Title</h4></label>
-                    <input class="col-lg-8 form-control" id="arxivTitle" disabled></input>
-                  </div>
-                </div><!--form-group-->
-                <div class="form-group">
-                  <div class="row">
-                    <label for="arxivId" class="control-label col-lg-3"><h4>Id</h4></label>
-                    <input class="col-lg-8" id="arxivId" disabled></input>
-                  </div>
-                </div><!--form-group-->
-                <div class="form-group">
-                  <div class="row">
-                    <label for="arxivAuthor" class="control-label col-lg-3"><h4>Authors</h4></label>
-                    <input class="col-lg-8" id="arxivAuthor" disabled></input>
-                  </div>
-                </div><!--form-group-->
-                <div class="form-group">
-                  <div class="row">
-                    <label for="arxivCat" class="control-label col-lg-3"><h4>Category</h4></label>
-                    <input class="col-lg-8" id="arxivCat" disabled></input>
-                  </div>
-                </div><!--form-group-->
-                <div class="form-group">
-                  <div class="row">
-                    <label for="arxivSummary" class="control-label col-lg-3"><h4>Abstract</h4></label>
-                    <textarea class="col-lg-8" id="arxivSummary" disabled></textarea>
-                  </div>
-                </div><!--form-group-->
+                <form class="form-horizontal">
+                  <div class="form-group">
+                    <label class="control-label col-lg-2">Title</label>
+                    <div class="col-lg-10">
+                      <p class="form-control-static" id="arxivTitle"></p>
+                    </div>
+                  </div><!--form-group-->
+                  <div class="form-group">
+                    <label class="control-label col-lg-2">Id</label>
+                    <div class="col-lg-10">
+                      <p class="form-control-static" id="arxivId"></p>
+                    </div>
+                  </div><!--form-group-->
+                  <div class="form-group">
+                    <label class="control-label col-lg-2">Authors</label>
+                    <div class="col-lg-10">
+                      <p class="form-control-static" id="arxivAuthor"></p>
+                    </div>
+                  </div><!--form-group-->
+                  <div class="form-group">
+                    <label class="control-label col-lg-2">Category</label>
+                    <div class="col-lg-10">
+                      <p class="form-control-static" id="arxivCat"></p>
+                    </div>
+                  </div><!--form-group-->
+                  <div class="form-group">
+                    <label class="control-label col-lg-2">Abstract</label>
+                    <div class="col-lg-10">
+                      <p class="form-control-static" id="arxivAbstract"></p>
+                    </div>
+                  </div><!--form-group-->
+                </form>
 
                 </div>
             </div>

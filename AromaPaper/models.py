@@ -40,7 +40,7 @@ class AromaPaperEntry(models.Model):
     def save(self, *args, **kwargs):
         self.abs_url=''.join(['arxiv.org/abs', self.identifier.split(':')[-1]])
         super(AromaPaperEntry,self).save(*args,**kwargs)
-        AromaPaperEntry.send(sender=AromaPaperEntry, instance=self)
+        paper_entry_created.send(sender=AromaPaperEntry, instance=self)
 
 paper_entry_created.connect(
     AromaEvent.AromaEvent_post_save, sender=AromaPaperEntry, dispatch_uid="AromaPaperEntry"
